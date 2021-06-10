@@ -11,11 +11,23 @@
     "react-scripts": "4.0.3",
     "web-vitals": "^1.0.1"
   },
+  "main": "src/electron-starter.js",
+  "homepage": "./",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "react-start": "react-scripts start",
+    "react-build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron": "electron .",
+    "start": "nf start",
+    "dist": "yarn run react-build && electron-builder"
+  },
+  "build": {
+    "extends": null,
+    "directories": {
+      "buildResources": "public"
+    },
+    "target" : "zip"
   },
   "eslintConfig": {
     "extends": [
@@ -34,5 +46,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "electron": "13.1.2",
+    "electron-builder": "22.10.5",
+    "foreman": "3.0.1"
   }
 }
