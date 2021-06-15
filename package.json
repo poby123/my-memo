@@ -5,7 +5,7 @@
   "main": "public/electron.js",
   "scripts": {
     "start": "concurrently \"npm run react:start\" \"npm run electron:start\"",
-    "electron:start": "wait-on http://localhost:3000 && cross-env mode=dev electron .",
+    "electron:start": "wait-on http://localhost:3000 && cross-env mode=dev npx nodemon --watch * --exec \"electron .\"",
     "react:start": "react-scripts start",
     "react:build": "react-scripts build",
     "build": "npm run react:build && electron-builder --publish=always"

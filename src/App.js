@@ -4,7 +4,7 @@ import MyTextAreaComponent from './components/MyTextAreaComponent';
 const App = () => {
   return (
     <>
-      <TextOptionsComponent />
+      {/* <TextOptionsComponent /> */}
       <MyTextAreaComponent />
     </>
   );
