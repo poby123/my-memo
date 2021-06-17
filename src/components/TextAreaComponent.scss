@@ -2,13 +2,15 @@
   display: flex;
   .textArea {
     width: 100%;
-    margin-top: 9vh;
-    height: 90vh;
+    height: 95vh;
     box-sizing: border-box;
     outline: none;
     border: none;
+    // border: 1px solid red;
     resize: none;
     color: black;
     padding: 0.2em;
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
 }

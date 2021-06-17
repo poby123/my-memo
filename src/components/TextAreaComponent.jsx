@@ -20,6 +20,7 @@ const TextAreaComponent = ({ children }) => {
     <>
       <div className="TextAreaComponent">
         <div
+          onScroll={() => console.log('scroll')}
           contentEditable="true"
           className="textArea"
           ref={textAreaEl}

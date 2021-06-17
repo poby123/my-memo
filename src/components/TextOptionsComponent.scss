@@ -1,5 +1,5 @@
 .TextOptionsComponent {
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   display: flex;
@@ -7,15 +7,12 @@
   width: 100%;
   button {
     background: none;
+    padding-right: 15px;
 
     i {
       color: white;
       font-size: 15px;
       line-height: 1.5em;
     }
-  }
-
-  button:hover {
-    cursor: pointer;
   }
 }
