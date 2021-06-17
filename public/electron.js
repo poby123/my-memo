@@ -1,12 +1,12 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, ipcMain, BrowserWindow, Menu} = require('electron');
 const path = require('path');
-const menu = require('./electron-menus');
 
 app.whenReady().then(() => {
   let win = new BrowserWindow({
     show: false,
     webPreferences: {
       enableRemoteModule: true,
+      nodeIntegration: true,
       preload: `${__dirname}/preload.js`,
     },
   });
@@ -19,7 +19,8 @@ app.whenReady().then(() => {
     win.loadFile(`${path.join(__dirname, '../build/index.html')}`);
   }
 
-  Menu.setApplicationMenu(menu);
+  const menus = require('./electron-menus')(win);
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 
   win.once('ready-to-show', () => win.show());
   win.on('closed', () => {
@@ -29,4 +30,8 @@ app.whenReady().then(() => {
 
 app.on('window-all-closed', () => {
   app.quit();
+});
+
+ipcMain.on('test', (event, value) => {
+  console.log(value);
 });

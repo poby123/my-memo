@@ -1,0 +1,21 @@
+.TextOptionsComponent {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  background: purple;
+  width: 100%;
+  button {
+    background: none;
+
+    i {
+      color: white;
+      font-size: 15px;
+      line-height: 1.5em;
+    }
+  }
+
+  button:hover {
+    cursor: pointer;
+  }
+}

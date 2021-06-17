@@ -1,11 +1,14 @@
 import TextOptionsComponent from './components/TextOptionsComponent';
-import MyTextAreaComponent from './components/MyTextAreaComponent';
+import TextAreaComponent from './components/TextAreaComponent';
+const { ipcRenderer } = window.require('electron');
+
+ipcRenderer.on('strikeThrough', () => document.execCommand('strikeThrough', false, null));
 
 const App = () => {
   return (
     <>
-      {/* <TextOptionsComponent /> */}
-      <MyTextAreaComponent />
+      <TextOptionsComponent />
+      <TextAreaComponent></TextAreaComponent>
     </>
   );
 };
