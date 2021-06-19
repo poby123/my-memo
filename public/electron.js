@@ -1,5 +1,8 @@
-const { app, ipcMain, BrowserWindow, Menu} = require('electron');
+const { app, ipcMain, BrowserWindow, Menu, remote, dialog } = require('electron');
 const path = require('path');
+const fs = require('fs');
+const channelList = require('../src/channelList');
+const dialogOptions = require('./electron-dialog-options');
 
 app.whenReady().then(() => {
   let win = new BrowserWindow({
@@ -32,6 +35,29 @@ app.on('window-all-closed', () => {
   app.quit();
 });
 
-ipcMain.on('test', (event, value) => {
-  console.log(value);
+/* Ipc Handlers */
+ipcMain.on(channelList.response.saveAs, async (event, value) => {
+  try {
+    const { filePath } = await dialog.showSaveDialog(dialogOptions.save);
+
+    /* invalid path */
+    if (!filePath) {
+      return;
+    }
+
+    const ext = path.extname(filePath);
+    if (ext === '.html' || ext === '.mthml') {
+      value = value.html;
+    } else {
+      value = value.txt;
+    }
+
+    fs.writeFile(filePath, value, (err) => {
+      if (err) {
+        console.error('error is occured! :', err);
+      }
+    });
+  } catch (e) {
+    console.error(e);
+  }
 });
