@@ -19,6 +19,14 @@ ipcRenderer.on(channelList.request.saveAs, () => {
   });
 });
 
+/* File Open Handler */
+ipcRenderer.on(channelList.request.sendFileContent, (e, value) => {
+  const area = document.getElementById('textEditor');
+  area.innerHTML = value;
+});
+
+
+/* Text Editor Component */
 const TextAreaComponent = ({ children }) => {
   let [content, setContent] = useState(children);
   let textAreaEl = useRef(null);

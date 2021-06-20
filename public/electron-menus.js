@@ -1,9 +1,10 @@
 const { app } = require('electron');
 const channelList = require('../src/channelList');
+const functions = require('./electron-functions');
 
 const electronMenu = (win) => {
-  const sendToReact = (channelName) => {
-    win.webContents.send(channelName);
+  const sendToReact = (channelName, val) => {
+    win.webContents.send(channelName, val);
   };
 
   return [
@@ -12,7 +13,17 @@ const electronMenu = (win) => {
       label: 'File',
       submenu: [
         { label: 'New File', accelerator: 'CmdOrCtrl+N', click() {} },
-        { label: 'Open File', accelerator: 'CmdOrCtrl+O' },
+        {
+          label: 'Open File',
+          accelerator: 'CmdOrCtrl+O',
+          async click() {
+            try {
+              await functions.fileOpen((fileContent) => sendToReact(channelList.request.sendFileContent, fileContent));
+            } catch (e) {
+              console.log(e);
+            }
+          },
+        },
         {
           label: 'Save As',
           accelerator: 'CmdOrCtrl+S',
@@ -22,9 +33,7 @@ const electronMenu = (win) => {
         },
         {
           label: 'Save',
-          click() {
-            
-          },
+          click() {},
         },
         { type: 'separator' },
         {

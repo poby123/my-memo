@@ -15,4 +15,21 @@ module.exports = {
       { name: 'All Files', extensions: ['*'] },
     ],
   },
+
+  open: {
+    title: 'Open file',
+
+    //Placeholder 2
+    defaultPath: __dirname,
+
+    //Placeholder 4
+    buttonLabel: 'Open',
+
+    //Placeholder 3
+    filters: [
+      { name: 'Html', extensions: ['html', 'mhtml'] },
+      { name: 'Plain text', extensions: ['txt'] },
+      { name: 'All Files', extensions: ['*'] },
+    ],
+  },
 };
