@@ -12,13 +12,19 @@ const electronMenu = (win) => {
     {
       label: 'File',
       submenu: [
-        { label: 'New File', accelerator: 'CmdOrCtrl+N', click() {} },
+        {
+          label: 'New File',
+          accelerator: 'CmdOrCtrl+N',
+          click() {
+            functions.newWindow();
+          },
+        },
         {
           label: 'Open File',
           accelerator: 'CmdOrCtrl+O',
           async click() {
             try {
-              await functions.fileOpen((fileContent) => sendToReact(channelList.request.sendFileContent, fileContent));
+              await functions.fileOpen(win);
             } catch (e) {
               console.log(e);
             }
@@ -26,13 +32,13 @@ const electronMenu = (win) => {
         },
         {
           label: 'Save As',
-          accelerator: 'CmdOrCtrl+S',
           click() {
             sendToReact(channelList.request.saveAs);
           },
         },
         {
           label: 'Save',
+          accelerator: 'CmdOrCtrl+S',
           click() {},
         },
         { type: 'separator' },

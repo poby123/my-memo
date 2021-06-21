@@ -13,6 +13,8 @@ ipcRenderer.on(channelList.request.strikeThrough, () =>
 /* Save request handler */
 ipcRenderer.on(channelList.request.saveAs, () => {
   const area = document.getElementById('textEditor');
+
+  /* send textArea content to electron main process to local save */
   ipcRenderer.send(channelList.response.saveAs, {
     html: area.innerHTML,
     txt: area.innerText,
@@ -22,9 +24,11 @@ ipcRenderer.on(channelList.request.saveAs, () => {
 /* File Open Handler */
 ipcRenderer.on(channelList.request.sendFileContent, (e, value) => {
   const area = document.getElementById('textEditor');
-  area.innerHTML = value;
-});
 
+  /* get data from main process and set as content and file name */
+  area.innerHTML = value.fileContent;
+  document.title = value.fileName;
+});
 
 /* Text Editor Component */
 const TextAreaComponent = ({ children }) => {
