@@ -10,11 +10,26 @@ ipcRenderer.on(channelList.request.strikeThrough, () =>
   document.execCommand('strikeThrough', false, null),
 );
 
-/* Save request handler */
-ipcRenderer.on(channelList.request.saveAs, () => {
+/* Sava request handler */
+ipcRenderer.on(channelList.request.save, () => {
   const area = document.getElementById('textEditor');
 
   /* send textArea content to electron main process to local save */
+  ipcRenderer.send(channelList.response.save, {
+    fileName: document.title,
+    filePath: document.filePath,
+    fileContent: {
+      html: area.innerHTML,
+      txt: area.innerText,
+    },
+  });
+});
+
+/* SaveAs request handler */
+ipcRenderer.on(channelList.request.saveAs, () => {
+  const area = document.getElementById('textEditor');
+
+  /* send textArea content to electron main process to local save as */
   ipcRenderer.send(channelList.response.saveAs, {
     html: area.innerHTML,
     txt: area.innerText,
@@ -22,18 +37,21 @@ ipcRenderer.on(channelList.request.saveAs, () => {
 });
 
 /* File Open Handler */
-ipcRenderer.on(channelList.request.sendFileContent, (e, value) => {
+ipcRenderer.on(channelList.request.sendFileContent, (e, { fileContent, fileName, filePath }) => {
   const area = document.getElementById('textEditor');
 
+  console.log('sendfileContent! ', fileContent);
+
   /* get data from main process and set as content and file name */
-  area.innerHTML = value.fileContent;
-  document.title = value.fileName;
+  area.innerHTML = fileContent;
+  document.title = fileName;
+  document.filePath = filePath;
 });
 
 /* Text Editor Component */
 const TextAreaComponent = ({ children }) => {
-  let [content, setContent] = useState(children);
-  let textAreaEl = useRef(null);
+  const [content, setContent] = useState(children);
+  const textAreaEl = useRef(null);
 
   /* get inner html from event object and set content */
   const onInputHandler = (e) => setContent(e.target.innerHTML);

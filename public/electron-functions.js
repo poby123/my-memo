@@ -48,23 +48,86 @@ class ElectronFunctions {
         return;
       }
 
-      fs.readFile(filePaths[0], 'utf-8', (err, fileContent) => {
+      await this.fileOpenWithOutDialog(win, { filePath: filePaths[0] });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  /* file open */
+  fileOpenWithOutDialog = async (win, { filePath }) => {
+    try {
+      /* invalid path */
+      if (!filePath) {
+        return;
+      }
+
+      fs.readFile(filePath, 'utf-8', (err, fileContent) => {
         if (err) {
           throw err;
         }
-        const fileName = path.basename(filePaths[0]);
-        this.sendToReact(win, channelList.request.sendFileContent, { fileContent, fileName });
+        const fileName = path.basename(filePath);
+
+        this.sendToReact(win, channelList.request.sendFileContent, {
+          fileContent,
+          fileName,
+          filePath,
+        });
       });
     } catch (e) {
       console.error(e);
     }
   };
 
+  /* file save */
+  fileSave = async (val) => {
+    try {
+      if (!val.fileName || !val.filePath) {
+        await this.fileSaveAs(val);
+        return;
+      }
+
+      const writeFileResult = await this.writeFile({
+        filePath: val.filePath,
+        fileContent: val.fileContent,
+      });
+
+      if (writeFileResult.result) {
+        await this.fileOpenWithOutDialog(BrowserWindow.getFocusedWindow(), {
+          filePath: writeFileResult.filePath,
+          fileContent: writeFileResult.fileContent,
+          fileName: writeFileResult.fileName,
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   /* file save as */
-  fileSaveAs = async (event, value) => {
+  fileSaveAs = async (val) => {
     try {
       const { filePath } = await dialog.showSaveDialog(dialogOptions.save);
+      const writeFileResult = await this.writeFile({
+        filePath,
+        fileContent: val,
+      });
 
+      if (writeFileResult.result) {
+        await this.fileOpenWithOutDialog(BrowserWindow.getFocusedWindow(), {
+          filePath: writeFileResult.filePath,
+          fileContent: writeFileResult.fileContent,
+          fileName: writeFileResult.fileName,
+        });
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  /* write file */
+  writeFile = async ({ filePath, fileContent }) => {
+    try {
       /* invalid path */
       if (!filePath) {
         return;
@@ -74,24 +137,26 @@ class ElectronFunctions {
       const ext = path.extname(filePath);
 
       if (ext === '.html' || ext === '.mthml') {
-        value = value.html;
+        fileContent = fileContent.html;
       } else {
-        value = value.txt;
+        fileContent = fileContent.txt;
       }
 
-      fs.writeFile(filePath, value, (err) => {
+      if(fileContent === undefined){
+        fileContent = '';
+      }
+
+      fs.writeFile(filePath, fileContent, (err) => {
         if (err) {
           console.error('error is occured! :', err);
         }
       });
 
-      /* After save file, open file */
-      // dialog 생기는 문제...
-      // this.fileOpen((value) => sendToReact(channelList.request.sendFileContent, value));
-      
+      return { result: true, filePath, fileContent, fileName };
     } catch (e) {
       console.error(e);
     }
+    return { result: false };
   };
 }
 

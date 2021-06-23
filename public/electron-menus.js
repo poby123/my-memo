@@ -26,20 +26,23 @@ const electronMenu = (win) => {
             try {
               await functions.fileOpen(win);
             } catch (e) {
-              console.log(e);
+              console.error(e);
             }
           },
         },
         {
           label: 'Save As',
           click() {
+            console.log('save as invoked');
             sendToReact(channelList.request.saveAs);
           },
         },
         {
           label: 'Save',
           accelerator: 'CmdOrCtrl+S',
-          click() {},
+          click() {
+            sendToReact(channelList.request.save);
+          },
         },
         { type: 'separator' },
         {

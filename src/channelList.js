@@ -1,14 +1,12 @@
 module.exports = {
   request: {
     strikeThrough: 'strikeThroughRequest',
+    save: 'saveRequest',
     saveAs: 'saveAsRequest',
     sendFileContent: 'sendFileContentRequest',
-    setFileName: 'setFileNameRequest',
-    getFileName: 'getFileNameRequest',
   },
   response: {
+    save: 'saveResponse',
     saveAs: 'saveAsResponse',
-    setFileName: 'setFileNameResponse',
-    getFileName: 'getFileNameResponse',
   },
 };

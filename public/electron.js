@@ -4,6 +4,7 @@ const fs = require('fs');
 const channelList = require('../src/channelList');
 const dialogOptions = require('./electron-dialog-options');
 const functions = require('./electron-functions');
+const { assert } = require('console');
 
 app.whenReady().then(functions.newWindow);
 
@@ -12,4 +13,9 @@ app.on('window-all-closed', () => {
 });
 
 /* Ipc Handlers */
-ipcMain.on(channelList.response.saveAs, functions.fileSaveAs);
+
+/* Save */
+ipcMain.on(channelList.response.save, (e, val) => functions.fileSave(val));
+
+/* Save as */
+ipcMain.on(channelList.response.saveAs, (e, val) => functions.fileSaveAs(val));
