@@ -1,13 +1,14 @@
-const { app, ipcMain, BrowserWindow, Menu, remote, dialog } = require('electron');
+const { BrowserWindow, Menu, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const channelList = require('../src/channelList');
 const dialogOptions = require('./electron-dialog-options');
+const logColorTable = require('../src/logColorTable');
 
 class ElectronFunctions {
   /* send to React */
-  sendToReact = (win, channelName, val) => {
-    win.webContents.send(channelName, val);
+  sendToReact = (channelName, val) => {
+    BrowserWindow.getFocusedWindow().webContents.send(channelName, val);
   };
 
   /* new window */
@@ -25,7 +26,6 @@ class ElectronFunctions {
       win.loadURL('http://localhost:3000');
       win.webContents.openDevTools();
     } else {
-      // win.loadURL(`file://${path.join(__dirname, '../build/index.html')}`)
       win.loadFile(`${path.join(__dirname, '../build/index.html')}`);
     }
 
@@ -38,48 +38,57 @@ class ElectronFunctions {
     });
   };
 
-  /* file open */
-  fileOpen = async (win) => {
+  /**
+   * File open with dialog
+   */
+  fileOpenWithDialog = async () => {
     try {
       const { filePaths } = await dialog.showOpenDialog(dialogOptions.open);
 
-      /* invalid path */
       if (filePaths.length <= 0) {
         return;
       }
 
-      await this.fileOpenWithOutDialog(win, { filePath: filePaths[0] });
+      this.fileOpenWithOutDialog({ filePath: filePaths[0] });
     } catch (e) {
-      console.error(e);
+      console.error(`${logColorTable.FgRed}%s`, e);
+      this.sendToReact(channelList.request.error, 'Could not open file due to : ', e);
     }
   };
 
-  /* file open */
-  fileOpenWithOutDialog = async (win, { filePath }) => {
-    try {
-      /* invalid path */
-      if (!filePath) {
-        return;
+  /**
+   * File open without dialog
+   * @param {string} filePath - file path for reading file
+   */
+  fileOpenWithOutDialog = ({ filePath }) => {
+    if (!filePath) {
+      this.sendToReact(channelList.request.error, 'Could not open file due to missing file path.');
+      return;
+    }
+
+    fs.readFile(filePath, 'utf-8', (err, fileContent) => {
+      if (err) {
+        this.sendToReact(channelList.request.error, `Could not open file due to : ${err}`);
       }
 
-      fs.readFile(filePath, 'utf-8', (err, fileContent) => {
-        if (err) {
-          throw err;
-        }
-        const fileName = path.basename(filePath);
-
-        this.sendToReact(win, channelList.request.sendFileContent, {
-          fileContent,
-          fileName,
-          filePath,
-        });
+      const fileName = path.basename(filePath);
+      this.sendToReact(channelList.request.sendFileContent, {
+        fileContent,
+        fileName,
+        filePath,
       });
-    } catch (e) {
-      console.error(e);
-    }
+    });
   };
 
-  /* file save */
+  /**
+   * @param {Object} val
+   * @param {string | undefined} val.fileName - file name
+   * @param {string | undefined} val.filePath - file path
+   *
+   * @param {Object} val.fileContent - file content to be saved
+   * @param {string} val.fileContent.html - file content html version
+   * @param {string} val.fileContent.txt - file content text version
+   */
   fileSave = async (val) => {
     try {
       if (!val.fileName || !val.filePath) {
@@ -87,74 +96,69 @@ class ElectronFunctions {
         return;
       }
 
-      const writeFileResult = await this.writeFile({
-        filePath: val.filePath,
-        fileContent: val.fileContent,
-      });
+      const writeFileResult = this.writeFile(val);
 
-      if (writeFileResult.result) {
-        await this.fileOpenWithOutDialog(BrowserWindow.getFocusedWindow(), {
-          filePath: writeFileResult.filePath,
-          fileContent: writeFileResult.fileContent,
-          fileName: writeFileResult.fileName,
-        });
+      if (writeFileResult.result === false) {
+        throw 'write file is failed.';
       }
+
+      this.fileOpenWithOutDialog(writeFileResult);
     } catch (e) {
-      console.error(e);
+      console.error(`${logColorTable.FgRed}%s`, e);
+      this.sendToReact(channelList.request.error, e);
     }
   };
 
-  /* file save as */
-  fileSaveAs = async (val) => {
+  /**
+   * file save as
+   * @param {Object} fileContent - File content to be saved
+   * @param {string} fileContent.html - html version content
+   * @param {string} fileContent.txt - text version content
+   */
+  fileSaveAs = async ({ fileContent }) => {
     try {
       const { filePath } = await dialog.showSaveDialog(dialogOptions.save);
-      const writeFileResult = await this.writeFile({
-        filePath,
-        fileContent: val,
-      });
+      const writeFileResult = this.writeFile({ filePath, fileContent });
 
-      if (writeFileResult.result) {
-        await this.fileOpenWithOutDialog(BrowserWindow.getFocusedWindow(), {
-          filePath: writeFileResult.filePath,
-          fileContent: writeFileResult.fileContent,
-          fileName: writeFileResult.fileName,
-        });
+      if (writeFileResult.result === false) {
+        throw 'write file is failed.';
       }
+
+      this.fileOpenWithOutDialog(writeFileResult);
     } catch (e) {
-      console.error(e);
+      console.error(`${logColorTable.FgRed}%s`, e);
+      this.sendToReact(channelList.request.error, e);
     }
   };
 
-  /* write file */
-  writeFile = async ({ filePath, fileContent }) => {
+  /**
+   * Write file
+   * @param {filePath : string} filePath
+   * @param {fileContent : string} fileContent
+   * @returns {{result: boolean, filePath:undefined | string, targetData:undefined | string, fileName:undefined | string }}
+   */
+  writeFile = ({ filePath, fileContent }) => {
     try {
-      /* invalid path */
       if (!filePath) {
-        return;
+        return { result: false };
       }
 
       const fileName = path.basename(filePath);
       const ext = path.extname(filePath);
+      let targetData = '';
 
       if (ext === '.html' || ext === '.mthml') {
-        fileContent = fileContent.html;
+        targetData = fileContent.html || '';
       } else {
-        fileContent = fileContent.txt;
+        targetData = fileContent.txt || '';
       }
 
-      if(fileContent === undefined){
-        fileContent = '';
-      }
+      // it is must be synchronized. if not read file error is occured due to not existing file.
+      fs.writeFileSync(filePath, targetData);
 
-      fs.writeFile(filePath, fileContent, (err) => {
-        if (err) {
-          console.error('error is occured! :', err);
-        }
-      });
-
-      return { result: true, filePath, fileContent, fileName };
+      return { result: true, filePath, targetData, fileName };
     } catch (e) {
-      console.error(e);
+      console.error(`${logColorTable.FgRed}%s`, e);
     }
     return { result: false };
   };

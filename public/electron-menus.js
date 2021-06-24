@@ -23,17 +23,12 @@ const electronMenu = (win) => {
           label: 'Open File',
           accelerator: 'CmdOrCtrl+O',
           async click() {
-            try {
-              await functions.fileOpen(win);
-            } catch (e) {
-              console.error(e);
-            }
+            await functions.fileOpenWithDialog();
           },
         },
         {
           label: 'Save As',
           click() {
-            console.log('save as invoked');
             sendToReact(channelList.request.saveAs);
           },
         },

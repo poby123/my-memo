@@ -4,6 +4,8 @@ module.exports = {
     save: 'saveRequest',
     saveAs: 'saveAsRequest',
     sendFileContent: 'sendFileContentRequest',
+    error: 'sendErrorMessage',
+    status: 'sendStatusMessage',
   },
   response: {
     save: 'saveResponse',
