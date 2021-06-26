@@ -1,4 +1,4 @@
-import channelList from './channelList';
+import channelList from './common/channelList';
 const { ipcRenderer } = window.require('electron');
 
 ipcRenderer.on(channelList.request.strikeThrough, () =>

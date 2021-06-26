@@ -11,10 +11,11 @@
     "build": "npm run react:build && electron-builder --publish=always"
   },
   "build": {
-    "appId": "com.example.electron-app",
+    "appId": "com.my-memo.electron-app",
     "files": [
       "build/**/*",
-      "node_modules/**/*"
+      "node_modules/**/*",
+      "src/common/**/*"
     ],
     "directories": {
       "buildResources": "assets"
@@ -47,6 +48,8 @@
   "dependencies": {
     "cross-env": "7.0.3",
     "node-sass": "6.0.0",
-    "prop-types": "15.7.2"
+    "prop-types": "15.7.2",
+    "react-color": "2.19.3",
+    "rgb-hex": "4.0.0"
   }
 }

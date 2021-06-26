@@ -1,57 +1,71 @@
 import PropTypes from 'prop-types';
+import ColorPickerComponent from './ColorPickerComponent';
 import './TextOptionsComponent.scss';
 
 const TextOptionsComponent = (props) => {
-  let options = props.options;
+  let { options } = props;
 
   let present = options.map((item) => {
     return (
-      <button title={item.buttonTitle} key={item.buttonTitle} onClick={item.callback}>
+      <button title={item.title} key={item.title} onClick={item.callback} className="optionButton">
         <i className={item.iconName}></i>
       </button>
     );
   });
 
-  return <div className="TextOptionsComponent">{present}</div>;
+  return (
+    <div className="TextOptionsComponent">
+      {present}
+      <ColorPickerComponent {...props} />
+    </div>
+  );
 };
 
 /* Prop Types */
 TextOptionsComponent.propTypes = {
   options: PropTypes.array,
+  onClickPalette: PropTypes.func,
+  showPalette: PropTypes.bool,
+  color: PropTypes.string,
+  onChangeColor: PropTypes.func,
 };
 
 /* Default Props */
 TextOptionsComponent.defaultProps = {
   options: [
     {
-      buttonTitle: 'Bold: Ctrl+B',
+      title: 'Bold: Ctrl+B',
       iconName: 'fas fa-bold',
       callback: () => {
         document.execCommand('bold', false, null);
       },
     },
     {
-      buttonTitle: 'Italic: Ctrl+I',
+      title: 'Italic: Ctrl+I',
       iconName: 'fas fa-italic',
       callback: () => {
         document.execCommand('italic', false, null);
       },
     },
     {
-      buttonTitle: 'Ctrl+Shift+S',
+      title: 'Ctrl+Shift+S',
       iconName: 'fas fa-strikethrough',
       callback: () => {
         document.execCommand('strikeThrough', false, null);
       },
     },
     {
-      buttonTitle: 'Underline: Ctrl+U',
+      title: 'Underline: Ctrl+U',
       iconName: 'fas fa-underline',
       callback: () => {
         document.execCommand('underline', false, null);
       },
     },
   ],
+  onClickPalette: () => {},
+  showPalette: false,
+  color: '#000',
+  onChangeColor: () => {},
 };
 
 export default TextOptionsComponent;

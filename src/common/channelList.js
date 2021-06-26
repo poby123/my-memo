@@ -8,6 +8,7 @@ module.exports = {
     status: 'sendStatusMessage',
   },
   response: {
+    isLoaded: 'reactLoadedResponse',
     save: 'saveResponse',
     saveAs: 'saveAsResponse',
   },

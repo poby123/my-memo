@@ -1,6 +1,6 @@
 const { app } = require('electron');
-const channelList = require('../src/channelList');
 const functions = require('./electron-functions');
+const channelList = require('../src/common/channelList');
 
 const electronMenu = (win) => {
   const sendToReact = (channelName, val) => {

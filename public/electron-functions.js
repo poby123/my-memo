@@ -1,9 +1,9 @@
 const { BrowserWindow, Menu, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const channelList = require('../src/channelList');
 const dialogOptions = require('./electron-dialog-options');
-const logColorTable = require('../src/logColorTable');
+const channelList = require('../src/common/channelList');
+const logColorTable = require('../src/common/logColorTable');
 
 class ElectronFunctions {
   /* send to React */
@@ -36,6 +36,12 @@ class ElectronFunctions {
     win.on('closed', () => {
       win = null;
     });
+
+    // console.log('args : ', process.argv);
+    // const filePath = process.argv[1];
+    // if (filePath !== '.') {
+    //   functions.fileOpenWithOutDialog({ filePath });
+    // }
   };
 
   /**
