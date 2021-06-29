@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import { ChromePicker } from 'react-color';
+import PaletteComponent from './PaletteComponent';
 import './ColorPickerComponent.scss';
 
 const ColorPickerComponent = (props) => {
-  const { onClickPalette, color, colorButtonsColor, onChangeColor, showPalette } = props;
+  const { onClickPalette, showPalette, fgMode, onChangeFgMode, ...paletteProps } = props;
 
   const paletteButton = (
     <button title="Palette" key="Palette" onClick={onClickPalette} className="optionButton">
@@ -11,31 +11,17 @@ const ColorPickerComponent = (props) => {
     </button>
   );
 
-  const colorButtons = colorButtonsColor.map((c) => {
-    return (
-      <button
-        key={c}
-        className="colorButton"
-        style={{ backgroundColor: `${c}` }}
-        onClick={() => {
-          console.log(c, ' button is clicked.');
-          onChangeColor({ hex: c });
-        }}
-      ></button>
-    );
-  });
-
-  const picker = showPalette ? (
-    <ChromePicker className="ChromePicker" onChange={onChangeColor} color={color} />
-  ) : (
-    ''
+  const colorModeButton = (
+    <button title="colorMode" key="colorMode" onClick={onChangeFgMode} className="optionButton">
+      {fgMode ? <i className="fas fa-font"></i> : <i class="fas fa-highlighter"></i>}
+    </button>
   );
 
   return (
     <div className="ColorPickerComponent">
+      {colorModeButton}
       {paletteButton}
-      {colorButtons}
-      {picker}
+      {showPalette && <PaletteComponent {...paletteProps} />}
     </div>
   );
 };
@@ -43,14 +29,12 @@ const ColorPickerComponent = (props) => {
 /* Prop Types */
 ColorPickerComponent.propTypes = {
   showPalette: PropTypes.bool,
-  colorButtonsColor: PropTypes.array,
   onChangeColor: PropTypes.func,
 };
 
 /* Default Props */
 ColorPickerComponent.defaultProps = {
   showPalette: false,
-  colorButtonsColor: ['#000', '#fff', '#ff0000', '#00ff00', '#0000ff'],
   onChangeColor: () => {},
 };
 

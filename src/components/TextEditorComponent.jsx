@@ -8,24 +8,20 @@ const TextEditorComponent = (props) => {
   const textAreaEl = useRef(null);
 
   const onInputHandler = (e) => setContent(e.target.innerHTML);
-  const { onClick, color } = props;
+  const { onClick, color, fgMode } = props;
 
   useEffect(() => {
     textAreaEl.current.innerHTML = content;
     textAreaEl.current.focus();
-
-    // const onChangeColor = ({rgb}) => {
-    //   const { r, g, b, a } = rgb;
-    //   document.execCommand('styleWithCSS', false, true);
-    //   document.execCommand('foreColor', false, `rgba(${r},${g},${b},${a})`);
-    // }
 
     return () => textAreaEl && textAreaEl.removeEventListener('onInput', onInputHandler);
   }, []);
 
   useEffect(() => {
     document.execCommand('styleWithCSS', false, true);
-    document.execCommand('foreColor', false, color);
+
+    const mode = fgMode ? 'foreColor' : 'hiliteColor';
+    document.execCommand(mode, false, color);
     console.log('color updated ', color);
   }, [color]);
 

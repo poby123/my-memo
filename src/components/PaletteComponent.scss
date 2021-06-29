@@ -1,0 +1,26 @@
+.PaletteComponent {
+  position: absolute;
+  width: 200px;
+  height: 100px;
+  top: 1.5em;
+
+  padding: 0;
+  border-radius: 5%;
+  border: 1px solid purple;
+  background-color: white;
+  overflow-wrap: normal;
+  padding-left: auto;
+  padding-right: auto;
+
+  .colorButtons {
+    width: 30px;
+    height: 30px;
+    border: 0.5px solid black;
+    margin: 5px;
+    border-radius: 10%;
+  }
+
+  .colorButtons:hover {
+    box-shadow: 2px 2px 2px 2px gray;
+  }
+}
