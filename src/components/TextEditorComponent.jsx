@@ -4,11 +4,10 @@ import './TextEditorComponent.scss';
 import '../Renderer';
 
 const TextEditorComponent = (props) => {
-  const [content, setContent] = useState(props.content);
+  const { content, onChangeContent, onClick, color, fgMode, fontSize } = props;
   const textAreaEl = useRef(null);
 
-  const onInputHandler = (e) => setContent(e.target.innerHTML);
-  const { onClick, color, fgMode, fontSize } = props;
+  const onInputHandler = (e) => onChangeContent(e.target.innerHTML);
 
   useEffect(() => {
     textAreaEl.current.innerHTML = content;
@@ -43,6 +42,7 @@ const TextEditorComponent = (props) => {
 
 TextEditorComponent.propTypes = {
   content: PropTypes.string,
+  onChangeContent: PropTypes.func,
   onClick: PropTypes.func,
   fgMode: PropTypes.bool,
   fontSize: PropTypes.number,
@@ -50,6 +50,7 @@ TextEditorComponent.propTypes = {
 
 TextEditorComponent.defaultProps = {
   content: '',
+  onChangeContent: () => {},
   onClick: () => {},
   fgMode: true,
   fontSize: 3,

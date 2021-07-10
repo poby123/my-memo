@@ -5,7 +5,7 @@ ipcRenderer.on(channelList.request.strikeThrough, () =>
   document.execCommand('strikeThrough', false, null),
 );
 
-ipcRenderer.on(channelList.request.save, () => {
+ipcRenderer.on(channelList.request.save, (e, close) => {
   const area = document.getElementById('textEditor');
 
   ipcRenderer.send(channelList.response.save, {
@@ -15,6 +15,7 @@ ipcRenderer.on(channelList.request.save, () => {
       html: area.innerHTML,
       txt: area.innerText,
     },
+    close: close,
   });
 });
 
@@ -25,7 +26,7 @@ ipcRenderer.on(channelList.request.saveAs, () => {
     fileContent: {
       html: area.innerHTML,
       txt: area.innerText,
-    }
+    },
   });
 });
 
@@ -40,7 +41,6 @@ ipcRenderer.on(channelList.request.sendFileContent, (e, { fileContent, fileName,
 ipcRenderer.on(channelList.request.error, (e, msg) => {
   alert(msg);
 });
-
 
 ipcRenderer.on(channelList.request.staus, (e, msg) => {
   alert(msg);

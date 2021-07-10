@@ -11,10 +11,17 @@ app.on('window-all-closed', () => {
 /* Ipc Handlers */
 ipcMain.on(channelList.response.isLoaded, (e) => {
   const filePath = process.argv[1];
-  
+
   if (filePath && filePath !== '.') {
     functions.fileOpenWithOutDialog({ filePath: process.argv[1] });
   }
 });
-ipcMain.on(channelList.response.save, (e, val) => functions.fileSave(val));
+
+ipcMain.on(channelList.response.isChanged, (e, val) => {
+  functions.setIsChanged(val);
+});
+
+ipcMain.on(channelList.response.save, (e, val) => {
+  functions.fileSave(val);
+});
 ipcMain.on(channelList.response.saveAs, (e, val) => functions.fileSaveAs(val));

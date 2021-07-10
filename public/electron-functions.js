@@ -1,4 +1,4 @@
-const { BrowserWindow, Menu, dialog } = require('electron');
+const { BrowserWindow, Menu, dialog, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const dialogOptions = require('./electron-dialog-options');
@@ -9,6 +9,16 @@ class ElectronFunctions {
   /* send to React */
   sendToReact = (channelName, val) => {
     BrowserWindow.getFocusedWindow().webContents.send(channelName, val);
+  };
+
+  /* set is Changed */
+  setIsChanged = (status) => {
+    BrowserWindow.getFocusedWindow().isChanged = status;
+  };
+
+  /* close window */
+  closeWindow = () => {
+    BrowserWindow.getFocusedWindow().close();
   };
 
   /* new window */
@@ -33,21 +43,42 @@ class ElectronFunctions {
     Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 
     win.once('ready-to-show', () => win.show());
+
+    win.on('close', (e) => {
+      if (!BrowserWindow.getFocusedWindow().isChanged) {
+        return;
+      }
+
+      const response = dialog.showMessageBoxSync(null, dialogOptions.askBeforeQuit);
+      switch (response) {
+        case 2: // don't save
+          break;
+        case 1: // save
+          this.sendToReact(channelList.request.save, true);
+        case 0: // cancel
+          e.preventDefault();
+      }
+    });
+
     win.on('closed', () => {
       win = null;
     });
-
-    // console.log('args : ', process.argv);
-    // const filePath = process.argv[1];
-    // if (filePath !== '.') {
-    //   functions.fileOpenWithOutDialog({ filePath });
-    // }
   };
 
   /**
    * File open with dialog
    */
   fileOpenWithDialog = async () => {
+    if (BrowserWindow.getFocusedWindow().isChanged) {
+      const response = dialog.showMessageBoxSync(null, dialogOptions.askBeforeQuit);
+      switch (response) {
+        case 1: // save
+          this.sendToReact(channelList.request.save, true);
+        case 0: // cancel
+          return;
+      }
+    }
+
     try {
       const { filePaths } = await dialog.showOpenDialog(dialogOptions.open);
 
@@ -71,6 +102,8 @@ class ElectronFunctions {
       this.sendToReact(channelList.request.error, 'Could not open file due to missing file path.');
       return;
     }
+
+    BrowserWindow.getFocusedWindow().isChanged = false;
 
     fs.readFile(filePath, 'utf-8', (err, fileContent) => {
       if (err) {
@@ -97,7 +130,7 @@ class ElectronFunctions {
    */
   fileSave = async (val) => {
     try {
-      if (!val.fileName || !val.filePath) {
+      if (!val || !val.fileName || !val.filePath) {
         await this.fileSaveAs(val);
         return;
       }
@@ -108,10 +141,17 @@ class ElectronFunctions {
         throw 'write file is failed.';
       }
 
-      this.fileOpenWithOutDialog(writeFileResult);
+      BrowserWindow.getFocusedWindow().isChanged = false;
+
+      if (val.close) {
+        this.closeWindow();
+      } else {
+        this.fileOpenWithOutDialog(writeFileResult);
+      }
     } catch (e) {
       console.error(`${logColorTable.FgRed}%s`, e);
       this.sendToReact(channelList.request.error, e);
+      BrowserWindow.getFocusedWindow().isSaved = false;
     }
   };
 
@@ -121,19 +161,32 @@ class ElectronFunctions {
    * @param {string} fileContent.html - html version content
    * @param {string} fileContent.txt - text version content
    */
-  fileSaveAs = async ({ fileContent }) => {
+  fileSaveAs = async ({ fileContent, close }) => {
     try {
       const { filePath } = await dialog.showSaveDialog(dialogOptions.save);
+
+      // canceled.
+      if (!filePath) {
+        return;
+      }
+
       const writeFileResult = this.writeFile({ filePath, fileContent });
 
       if (writeFileResult.result === false) {
         throw 'write file is failed.';
       }
 
-      this.fileOpenWithOutDialog(writeFileResult);
+      BrowserWindow.getFocusedWindow().isChanged = false;
+
+      if (close) {
+        this.closeWindow();
+      } else {
+        this.fileOpenWithOutDialog(writeFileResult);
+      }
     } catch (e) {
       console.error(`${logColorTable.FgRed}%s`, e);
       this.sendToReact(channelList.request.error, e);
+      BrowserWindow.getFocusedWindow().isSaved = false;
     }
   };
 

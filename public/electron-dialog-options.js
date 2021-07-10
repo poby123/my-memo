@@ -32,4 +32,11 @@ module.exports = {
       { name: 'All Files', extensions: ['*'] },
     ],
   },
+
+  askBeforeQuit: {
+    type: 'question',
+    buttons: ['Cancel', 'Save', "Don't save"],
+    title: 'Question',
+    message: '나가기 전에 저장하시겠습니까?',
+  },
 };

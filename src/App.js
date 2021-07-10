@@ -9,15 +9,29 @@ const { ipcRenderer } = window.require('electron');
 import './App.scss';
 
 const App = () => {
+  /* changed */
+  const sendChanged = () => {
+    ipcRenderer.send(channelList.response.isChanged, true);
+  };
+
+  /* content */
+  const [content, setContent] = useState('');
+  const onChangeContent = (content) => {
+    setContent(content);
+    sendChanged();
+  };
+
   /* color */
   const [showPalette, setShowPalette] = useState(false);
   const [color, setColor] = useState('#000');
   const [fgMode, setFgMode] = useState(true);
-  const [isChanged, setIsChanged] = useState(false);
 
   const togglePalette = () => setShowPalette(!showPalette);
   const hidePalette = () => setShowPalette(false);
-  const onChangeColor = (c) => setColor(c);
+  const onChangeColor = (c) => {
+    setColor(c);
+    sendChanged();
+  };
   const onChangeFgMode = () => setFgMode(!fgMode);
 
   /* font */
@@ -29,6 +43,7 @@ const App = () => {
       return;
     }
     setFontSize(nextFontSize);
+    sendChanged();
   };
 
   useEffect(() => {
@@ -48,6 +63,8 @@ const App = () => {
         fontSize={fontSize}
       />
       <TextEditorComponent
+        content={content}
+        onChangeContent={onChangeContent}
         onClick={hidePalette}
         color={color}
         fgMode={fgMode}
