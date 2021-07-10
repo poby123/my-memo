@@ -4,6 +4,7 @@
   padding: 0;
 
   .textArea {
+    display: block;
     width: 100%;
     height: 95vh;
     box-sizing: border-box;
@@ -13,5 +14,12 @@
     padding: 0.2em;
     overflow-y: scroll;
     overflow-x: hidden;
+    
+    color: black;
+    
+    * {
+      text-decoration-color: black;
+      color: black;
+    }
   }
 }
