@@ -8,22 +8,22 @@ const TextEditorComponent = (props) => {
   const textAreaEl = useRef(null);
 
   const onInputHandler = (e) => setContent(e.target.innerHTML);
-  const { onClick, color, fgMode } = props;
+  const { onClick, color, fgMode, fontSize } = props;
 
   useEffect(() => {
     textAreaEl.current.innerHTML = content;
     textAreaEl.current.focus();
-
-    return () => textAreaEl && textAreaEl.removeEventListener('onInput', onInputHandler);
   }, []);
 
   useEffect(() => {
-    document.execCommand('styleWithCSS', false, true);
-
     const mode = fgMode ? 'foreColor' : 'hiliteColor';
+
+    document.execCommand('styleWithCSS', false, true);
     document.execCommand(mode, false, color);
-    console.log('color updated ', color);
-  }, [color]);
+    document.execCommand('fontSize', false, fontSize);
+
+    textAreaEl.current.focus();
+  }, [color, fontSize]);
 
   return (
     <>
@@ -44,11 +44,15 @@ const TextEditorComponent = (props) => {
 TextEditorComponent.propTypes = {
   content: PropTypes.string,
   onClick: PropTypes.func,
+  fgMode: PropTypes.bool,
+  fontSize: PropTypes.number,
 };
 
 TextEditorComponent.defaultProps = {
   content: '',
   onClick: () => {},
+  fgMode: true,
+  fontSize: 3,
 };
 
 export default TextEditorComponent;

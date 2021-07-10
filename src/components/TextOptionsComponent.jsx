@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import ColorPickerComponent from './ColorPickerComponent';
+import FontPickerComponent from './FontPickerComponent';
 import './TextOptionsComponent.scss';
 
 const TextOptionsComponent = (props) => {
@@ -16,7 +17,10 @@ const TextOptionsComponent = (props) => {
   return (
     <div className="TextOptionsComponent">
       {present}
+      <b className="optionLine">|</b>
       <ColorPickerComponent {...props} />
+      <b className="optionLine">|</b>
+      <FontPickerComponent {...props} />
     </div>
   );
 };

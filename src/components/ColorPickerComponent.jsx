@@ -13,7 +13,7 @@ const ColorPickerComponent = (props) => {
 
   const colorModeButton = (
     <button title="colorMode" key="colorMode" onClick={onChangeFgMode} className="optionButton">
-      {fgMode ? <i className="fas fa-font"></i> : <i class="fas fa-highlighter"></i>}
+      {fgMode ? <i className="fas fa-font"></i> : <i className="fas fa-highlighter"></i>}
     </button>
   );
 
