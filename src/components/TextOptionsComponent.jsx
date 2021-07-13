@@ -4,9 +4,23 @@ import FontPickerComponent from './FontPickerComponent';
 import './TextOptionsComponent.scss';
 
 const TextOptionsComponent = (props) => {
-  let { options } = props;
+  const {
+    options,
 
-  let present = options.map((item) => {
+    onClickForeApplyButton,
+    showForeColorPalette,
+    onClickForeColorPalette,
+    foreColor,
+    onChangeForeColor,
+
+    onClickBackgroundApplyButton,
+    showBackgroundColorPalette,
+    onClickBackgroundColorPalette,
+    backgroundColor,
+    onChangeBackgroundColor,
+  } = props;
+
+  const defaultButtons = options.map((item) => {
     return (
       <button title={item.title} key={item.title} onClick={item.callback} className="optionButton">
         <i className={item.iconName}></i>
@@ -16,9 +30,23 @@ const TextOptionsComponent = (props) => {
 
   return (
     <div className="TextOptionsComponent">
-      {present}
+      {defaultButtons}
       <b className="optionLine">|</b>
-      <ColorPickerComponent {...props} />
+      <ColorPickerComponent
+        showPalette={showForeColorPalette}
+        onClickPalette={onClickForeColorPalette}
+        modeButton={<i className="fas fa-font" style={{ color: foreColor }}></i>}
+        onClickModeButton={onClickForeApplyButton}
+        onChangeColor={onChangeForeColor}
+      />
+      <b className="optionLine">|</b>
+      <ColorPickerComponent
+        showPalette={showBackgroundColorPalette}
+        onClickPalette={onClickBackgroundColorPalette}
+        modeButton={<i className="fas fa-highlighter" style={{ color: backgroundColor }}></i>}
+        onClickModeButton={onClickBackgroundApplyButton}
+        onChangeColor={onChangeBackgroundColor}
+      />
       <b className="optionLine">|</b>
       <FontPickerComponent {...props} />
     </div>
@@ -28,10 +56,11 @@ const TextOptionsComponent = (props) => {
 /* Prop Types */
 TextOptionsComponent.propTypes = {
   options: PropTypes.array,
-  onClickPalette: PropTypes.func,
-  showPalette: PropTypes.bool,
-  color: PropTypes.string,
-  onChangeColor: PropTypes.func,
+
+  onClickForeColorPalette: PropTypes.func,
+  showForeColorPalette: PropTypes.bool,
+  foreColor: PropTypes.string,
+  onChangeForeColor: PropTypes.func,
 };
 
 /* Default Props */
@@ -66,10 +95,10 @@ TextOptionsComponent.defaultProps = {
       },
     },
   ],
-  onClickPalette: () => {},
-  showPalette: false,
-  color: '#000',
-  onChangeColor: () => {},
+  onClickForeColorPalette: () => {},
+  showForeColorPalette: false,
+  foreColor: '#000',
+  onChangeForeColor: () => {},
 };
 
 export default TextOptionsComponent;

@@ -8,7 +8,8 @@ Windows 메모장보다는 기능이 있으면서도, Word 보다는 가벼운 �
 - 🎈 코드 뷰티
 
 ### Problem
-
+- 버그(폰트 사이즈, 컬러) 
+-  
 
 ### Solved
 - ✅ 스크롤이 끝까지 위로 올라가지 않는 문제 : min-height 를 height로 바꾸고, scroll을 전체 창이 아닌, editable div 영역에 달아서, sticky가 fixed로 변하지 않도록 했다.

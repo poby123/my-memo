@@ -3,7 +3,7 @@ import PaletteComponent from './PaletteComponent';
 import './ColorPickerComponent.scss';
 
 const ColorPickerComponent = (props) => {
-  const { onClickPalette, showPalette, fgMode, onChangeFgMode, ...paletteProps } = props;
+  const { onClickPalette, showPalette, modeButton, onClickModeButton, ...paletteProps } = props;
 
   const paletteButton = (
     <button title="Palette" key="Palette" onClick={onClickPalette} className="optionButton">
@@ -11,15 +11,11 @@ const ColorPickerComponent = (props) => {
     </button>
   );
 
-  const colorModeButton = (
-    <button title="colorMode" key="colorMode" onClick={onChangeFgMode} className="optionButton">
-      {fgMode ? <i className="fas fa-font"></i> : <i className="fas fa-highlighter"></i>}
-    </button>
-  );
-
   return (
     <div className="ColorPickerComponent">
-      {colorModeButton}
+      <button className="optionButton" onClick={onClickModeButton}>
+        {modeButton}
+      </button>
       {paletteButton}
       {showPalette && <PaletteComponent {...paletteProps} />}
     </div>

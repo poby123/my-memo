@@ -15,7 +15,7 @@ const FontPickerComponent = (props) => {
         <i className="fas fa-angle-up"></i>
       </button>
 
-      {/* <b className="fontSize">{fontSize}</b> */}
+      <b className="fontSize">{fontSize}</b>
 
       <button
         title="fontSizeDownButton"
