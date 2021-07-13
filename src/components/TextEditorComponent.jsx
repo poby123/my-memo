@@ -141,7 +141,7 @@ const TextEditorComponent = (props) => {
         onChangeFontSize={onChangeFontSize}
         fontSize={fontSize}
       />
-      <div className="TextEditorComponent">
+      <div className="TextEditorComponent" spellCheck="false">
         <div
           contentEditable="true"
           className="textArea"
