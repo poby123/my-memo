@@ -35,16 +35,22 @@ const TextOptionsComponent = (props) => {
       <ColorPickerComponent
         showPalette={showForeColorPalette}
         onClickPalette={onClickForeColorPalette}
-        modeButton={<i className="fas fa-font" style={{ color: foreColor }}></i>}
-        onClickModeButton={onClickForeApplyButton}
+        applyButton={
+          <button className="optionButton" onClick={onClickForeApplyButton}>
+            <i className="fas fa-font" style={{ color: foreColor }}></i>
+          </button>
+        }
         onChangeColor={onChangeForeColor}
       />
       <b className="optionLine">|</b>
       <ColorPickerComponent
         showPalette={showBackgroundColorPalette}
         onClickPalette={onClickBackgroundColorPalette}
-        modeButton={<i className="fas fa-highlighter" style={{ color: backgroundColor }}></i>}
-        onClickModeButton={onClickBackgroundApplyButton}
+        applyButton={
+          <button className="optionButton" onClick={onClickBackgroundApplyButton}>
+            <i className="fas fa-highlighter" style={{ color: backgroundColor }}></i>
+          </button>
+        }
         onChangeColor={onChangeBackgroundColor}
       />
       <b className="optionLine">|</b>
@@ -57,10 +63,20 @@ const TextOptionsComponent = (props) => {
 TextOptionsComponent.propTypes = {
   options: PropTypes.array,
 
-  onClickForeColorPalette: PropTypes.func,
+  onClickForeApplyButton: PropTypes.func,
   showForeColorPalette: PropTypes.bool,
+  onClickForeColorPalette: PropTypes.func,
   foreColor: PropTypes.string,
   onChangeForeColor: PropTypes.func,
+
+  onClickBackgroundApplyButton: PropTypes.func,
+  showBackgroundColorPalette: PropTypes.bool,
+  onClickBackgroundColorPalette: PropTypes.func,
+  backgroundColor: PropTypes.string,
+  onChangeBackgroundColor: PropTypes.func,
+
+  onChangeFontSize: PropTypes.func,
+  fontSize: PropTypes.number,
 };
 
 /* Default Props */
@@ -95,10 +111,20 @@ TextOptionsComponent.defaultProps = {
       },
     },
   ],
-  onClickForeColorPalette: () => {},
+  onClickForeApplyButton: () => {},
   showForeColorPalette: false,
+  onClickForeColorPalette: () => {},
   foreColor: '#000',
   onChangeForeColor: () => {},
+
+  onClickBackgroundApplyButton: () => {},
+  showBackgroundColorPalette: false,
+  onClickBackgroundColorPalette: () => {},
+  backgroundColor: '#fff',
+  onChangeBackgroundColor: () => {},
+
+  onChangeFontSize: () => {},
+  fontSize: 3,
 };
 
 export default TextOptionsComponent;

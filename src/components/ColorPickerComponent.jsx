@@ -3,7 +3,7 @@ import PaletteComponent from './PaletteComponent';
 import './ColorPickerComponent.scss';
 
 const ColorPickerComponent = (props) => {
-  const { onClickPalette, showPalette, modeButton, onClickModeButton, ...paletteProps } = props;
+  const { showPalette, onClickPalette, applyButton, ...paletteProps } = props;
 
   const paletteButton = (
     <button title="Palette" key="Palette" onClick={onClickPalette} className="optionButton">
@@ -13,9 +13,7 @@ const ColorPickerComponent = (props) => {
 
   return (
     <div className="ColorPickerComponent">
-      <button className="optionButton" onClick={onClickModeButton}>
-        {modeButton}
-      </button>
+      {applyButton}
       {paletteButton}
       {showPalette && <PaletteComponent {...paletteProps} />}
     </div>
@@ -25,13 +23,15 @@ const ColorPickerComponent = (props) => {
 /* Prop Types */
 ColorPickerComponent.propTypes = {
   showPalette: PropTypes.bool,
-  onChangeColor: PropTypes.func,
+  onClickPalette: PropTypes.func,
+  applyButton: PropTypes.node,
 };
 
 /* Default Props */
 ColorPickerComponent.defaultProps = {
   showPalette: false,
-  onChangeColor: () => {},
+  onClickPalette: () => {},
+  applyButton: <button></button>,
 };
 
 export default ColorPickerComponent;

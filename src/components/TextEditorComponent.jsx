@@ -46,10 +46,14 @@ const TextEditorComponent = (props) => {
 
   const hideForeColorPalette = () => setShowForeColorPalette(false);
   const toggleForeColorPalette = () => setShowForeColorPalette(!showForeColorPalette);
-  const applyForeColor = () => {
-    console.log('foreground apply, ', foreColor);
+  const applyForeColor = (c) => {
+    if (c) {
+      setForeColor(c);
+    }
+    const targetForeColor = c || foreColor;
+    console.log('foreground apply, ', targetForeColor);
     document.execCommand('styleWithCSS', false, true);
-    document.execCommand('foreColor', false, foreColor);
+    document.execCommand('foreColor', false, targetForeColor);
     textAreaEl.current.focus();
   };
 
@@ -60,10 +64,15 @@ const TextEditorComponent = (props) => {
   const hideBackgroundColorPalette = () => setShowBackgroundColorPalette(false);
   const toggleBackgroundColorPalette = () =>
     setShowBackgroundColorPalette(!showBackgroundColorPalette);
-  const applyBackgroundColor = () => {
-    console.log('background apply, ', backgroundColor);
+  const applyBackgroundColor = (c) => {
+    if (c) {
+      setBackgroundColor(c);
+    }
+    const targetBackgroundColor = c || backgroundColor;
+
+    console.log('background apply, ', targetBackgroundColor);
     document.execCommand('styleWithCSS', false, true);
-    document.execCommand('hiliteColor', false, backgroundColor);
+    document.execCommand('hiliteColor', false, targetBackgroundColor);
     textAreaEl.current.focus();
   };
 
@@ -129,7 +138,7 @@ const TextEditorComponent = (props) => {
           hideBackgroundColorPalette();
         }}
         foreColor={foreColor}
-        onChangeForeColor={setForeColor}
+        onChangeForeColor={applyForeColor}
         onClickBackgroundApplyButton={applyBackgroundColor}
         showBackgroundColorPalette={showBackgroundColorPalette}
         onClickBackgroundColorPalette={() => {
@@ -137,7 +146,7 @@ const TextEditorComponent = (props) => {
           hideForeColorPalette();
         }}
         backgroundColor={backgroundColor}
-        onChangeBackgroundColor={setBackgroundColor}
+        onChangeBackgroundColor={applyBackgroundColor}
         onChangeFontSize={onChangeFontSize}
         fontSize={fontSize}
       />

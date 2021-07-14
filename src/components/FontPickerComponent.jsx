@@ -7,23 +7,23 @@ const FontPickerComponent = (props) => {
   const fontSizeButton = (
     <>
       <button
-        title="fontSizeUpButton"
-        key="fontSizeUpButton"
-        className="optionButton"
-        onClick={() => onChangeFontSize(1)}
-      >
-        <i className="fas fa-angle-up"></i>
-      </button>
-
-      <b className="fontSize">{fontSize}</b>
-
-      <button
         title="fontSizeDownButton"
         key="fontSizeDownButton"
         className="optionButton"
         onClick={() => onChangeFontSize(-1)}
       >
         <i className="fas fa-angle-down"></i>
+      </button>
+
+      <b className="fontSize">{fontSize}</b>
+
+      <button
+        title="fontSizeUpButton"
+        key="fontSizeUpButton"
+        className="optionButton"
+        onClick={() => onChangeFontSize(1)}
+      >
+        <i className="fas fa-angle-up"></i>
       </button>
     </>
   );
