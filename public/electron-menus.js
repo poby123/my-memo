@@ -2,11 +2,7 @@ const { app } = require('electron');
 const functions = require('./electron-functions');
 const channelList = require('../src/common/channelList');
 
-const electronMenu = (win) => {
-  const sendToReact = (channelName, val) => {
-    win.webContents.send(channelName, val);
-  };
-
+const electronMenu = () => {
   return [
     /* File */
     {
@@ -29,14 +25,14 @@ const electronMenu = (win) => {
         {
           label: 'Save As',
           click() {
-            sendToReact(channelList.request.saveAs);
+            functions.sendToReact(channelList.request.saveAs);
           },
         },
         {
           label: 'Save',
           accelerator: 'CmdOrCtrl+S',
           click() {
-            sendToReact(channelList.request.save);
+            functions.sendToReact(channelList.request.save);
           },
         },
         { type: 'separator' },
@@ -66,7 +62,7 @@ const electronMenu = (win) => {
           accelerator: 'CmdOrCtrl+Shift+S',
           visible: false,
           click() {
-            sendToReact(channelList.request.strikeThrough);
+            functions.sendToReact(channelList.request.strikeThrough);
           },
         },
       ],

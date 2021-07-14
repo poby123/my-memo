@@ -1,4 +1,4 @@
-const { BrowserWindow, Menu, dialog, ipcMain } = require('electron');
+const { BrowserWindow, Menu, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const dialogOptions = require('./electron-dialog-options');
@@ -39,8 +39,7 @@ class ElectronFunctions {
       win.loadFile(`${path.join(__dirname, '../build/index.html')}`);
     }
 
-    const menus = require('./electron-menus')(win);
-    Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
+    Menu.setApplicationMenu(Menu.buildFromTemplate(require('./electron-menus')()));
 
     win.once('ready-to-show', () => win.show());
 
