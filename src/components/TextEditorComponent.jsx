@@ -99,9 +99,11 @@ const TextEditorComponent = (props) => {
     textAreaEl.current.focus();
   };
 
+  /* text area ref */
   const textAreaEl = useRef(null);
   const onInputHandler = (e) => onChangeContent(e.target.innerHTML);
 
+  /* update status for each row */
   const updateState = () => {
     const node = getSelectionStart();
     const targetFontSize = fontSizeList[node.style.fontSize] || 3;
@@ -114,6 +116,18 @@ const TextEditorComponent = (props) => {
     setBackgroundColor(targetBackgroundColor);
   };
 
+  /* code button */
+  const onClickCubeButton = () => {
+    const targetBackgroundColor = backgroundColor == '#fff' ? '#000000' : backgroundColor;
+    document.execCommand(
+      'insertHTML',
+      false,
+      `<br/><div style="background-color:${targetBackgroundColor}; font-size:inherit; color:${'#ffffff'};">.</div><br/>`,
+    );
+    textAreaEl.current.focus();
+  };
+
+  /* component did mount */
   useEffect(() => {
     textAreaEl.current.innerHTML = content;
 
@@ -149,6 +163,7 @@ const TextEditorComponent = (props) => {
         onChangeBackgroundColor={applyBackgroundColor}
         onChangeFontSize={onChangeFontSize}
         fontSize={fontSize}
+        onClickCubeButton={onClickCubeButton}
       />
       <div className="TextEditorComponent" spellCheck="false">
         <div

@@ -18,6 +18,8 @@ const TextOptionsComponent = (props) => {
     onClickBackgroundColorPalette,
     backgroundColor,
     onChangeBackgroundColor,
+
+    onClickCubeButton,
   } = props;
 
   const defaultButtons = options.map((item) => {
@@ -31,6 +33,9 @@ const TextOptionsComponent = (props) => {
   return (
     <div className="TextOptionsComponent">
       {defaultButtons}
+      <button className="optionButton" id="cubeButton" onClick={onClickCubeButton}>
+        <i className="fas fa-cube"></i>
+      </button>
       <b className="optionLine">|</b>
       <ColorPickerComponent
         showPalette={showForeColorPalette}
@@ -77,6 +82,8 @@ TextOptionsComponent.propTypes = {
 
   onChangeFontSize: PropTypes.func,
   fontSize: PropTypes.number,
+
+  onClickCubeButton: PropTypes.func,
 };
 
 /* Default Props */
@@ -125,6 +132,8 @@ TextOptionsComponent.defaultProps = {
 
   onChangeFontSize: () => {},
   fontSize: 3,
+
+  onClickCubeButton: () => {},
 };
 
 export default TextOptionsComponent;
