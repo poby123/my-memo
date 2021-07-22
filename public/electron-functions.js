@@ -102,7 +102,9 @@ class ElectronFunctions {
       return;
     }
 
-    BrowserWindow.getFocusedWindow().isChanged = false;
+    if (BrowserWindow.getFocusedWindow()) {
+      BrowserWindow.getFocusedWindow().isChanged = false;
+    }
 
     fs.readFile(filePath, 'utf-8', (err, fileContent) => {
       if (err) {
@@ -140,7 +142,9 @@ class ElectronFunctions {
         throw 'write file is failed.';
       }
 
-      BrowserWindow.getFocusedWindow().isChanged = false;
+      if (BrowserWindow.getFocusedWindow()) {
+        BrowserWindow.getFocusedWindow().isChanged = false;
+      }
 
       if (val.close) {
         this.closeWindow();

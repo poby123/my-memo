@@ -3,12 +3,14 @@
 Windows 메모장보다는 기능이 있으면서도, Word 보다는 가벼운 프로그램을 지향한다.
 
 ### Todo
-- 🎈 글씨체 - 넣지 말까?
-- 🎈 표- 넣지 말까?
-- 🎈 코드 뷰티
+- 🎈 폰트선택, 표, 이미지, 코드 - 넣지 말까?
+- 🎈 블록을 만들때 선택된 내용이 있으면 블록안에 넣어지도록 하기.
+- 🎈 블록에 내용을 붙여넣을 때 배경색이 따라오지 않도록 하기.
+- 🎈 색깔 선택 UI 개선...?
 
 ### Problem
-- 버그(폰트 사이즈, 컬러) 
+- ⛏ Tab 키 안됨.
+- ⛏ 블록을 만들
 
 ### Solved
 - ✅ 스크롤이 끝까지 위로 올라가지 않는 문제 : min-height 를 height로 바꾸고, scroll을 전체 창이 아닌, editable div 영역에 달아서, sticky가 fixed로 변하지 않도록 했다.
@@ -24,3 +26,4 @@ Windows 메모장보다는 기능이 있으면서도, Word 보다는 가벼운 �
 - ✅ 배경색
 - ✅ 끄기 전에, 파일을 새로 열기 전에 저장할지 물어보는 다이얼로그 생성해서 안정성 증가.
 - ✅ 맞춤법 검사기 끄기
+- ✅ 연결프로그램으로 선택시 saveWithoutDialog 에서 "Uncaught Exception: TypeError: Cannot set property 'isChanged' of null" error 발생. undefined 체크를 통해 해결.
