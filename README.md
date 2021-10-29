@@ -1,4 +1,4 @@
-## My Memo
+## My Memo - DEV branch
 
 Windows 메모장보다는 기능이 있으면서도, Word 보다는 가벼운 프로그램을 지향한다.
 
